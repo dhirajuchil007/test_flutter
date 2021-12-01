@@ -154,7 +154,7 @@ class _SelectPaymentModeState extends State<SelectPaymentMode> {
               FutureBuilder<InvestResponse>(
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(snapshot.data.toString());
+                    return Text("Order placed");
                   } else {
                     return Container();
                   }
@@ -164,7 +164,7 @@ class _SelectPaymentModeState extends State<SelectPaymentMode> {
               FutureBuilder(
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(snapshot.data.toString());
+                    return Text("Payment Link Generated");
                   } else {
                     return Container();
                   }

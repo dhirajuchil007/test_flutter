@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:test_flutter/select_payment_mode.dart';
 import 'package:test_flutter/models/scheme_model.dart';
 
@@ -112,18 +113,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      child: const Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text("ICICI Prudential Liquid Fund (G)"),
+                    GestureDetector(
+                      onTap: () => showModal(context),
+                      child: Container(
+                        child: const Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Text("ICICI Prudential Liquid Fund (G)"),
+                        ),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey)),
                       ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.grey)),
                     ),
                     Padding(
                       padding: paddingAround,
                       child: TextField(
+                        maxLength: 8,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
                         controller: myController,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(hintText: "Enter Amount"),
@@ -150,5 +159,15 @@ class _MyHomePageState extends State<MyHomePage> {
         // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
+  }
+
+  void showModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Text("This is a modal"),
+          );
+        });
   }
 }

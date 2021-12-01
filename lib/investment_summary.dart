@@ -7,13 +7,13 @@ class InvestmentSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-      title: Text("Summary"),
+        title: const Text("Summary"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
         child: Center(
           child: Column(
-            children: [
+            children: const [
               Text(
                 "Investment successful",
                 style: TextStyle(fontSize: 25),

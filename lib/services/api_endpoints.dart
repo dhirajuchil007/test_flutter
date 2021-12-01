@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:test_flutter/models/get_schemes_response.dart';
 import 'package:test_flutter/models/invest.dart';
 import 'package:test_flutter/models/mfpayment_response.dart';
 import 'package:test_flutter/services/constants.dart';
@@ -66,4 +67,8 @@ class API_Endpoints {
 
     return mfpaymentResponse;
   }
+
+  /*Future<GetSchemesResponse> getRecommendedSchemes(String customerId) async{
+
+  }*/
 }
