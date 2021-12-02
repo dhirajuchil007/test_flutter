@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:test_flutter/select_payment_mode.dart';
 import 'package:test_flutter/models/scheme_model.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:test_flutter/start.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,13 +30,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const Start(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class InvestmentFlow extends StatefulWidget {
+  const InvestmentFlow({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -47,14 +50,16 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<InvestmentFlow> createState() => _InvestmentFlowState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _InvestmentFlowState extends State<InvestmentFlow> {
   int _counter = 0;
   SchemeModel schemeModel = SchemeModel(
       1000001, "ICICI prudential liquid fund (G)", "www.google.com");
   final myController = TextEditingController();
+  final databaseRef = FirebaseDatabase.instance.reference();
+  final Future<FirebaseApp> _future = Firebase.initializeApp();
 
   void _incrementCounter() {
     setState(() {
@@ -70,6 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     var padding = 20.0;
+    databaseRef.once().then((DataSnapshot snapshot) {
+      print('Data : ${snapshot.value}');
+    });
     var paddingAround =
         EdgeInsets.symmetric(horizontal: padding, vertical: padding);
     return SafeArea(
