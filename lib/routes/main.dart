@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:test_flutter/select_payment_mode.dart';
+import 'package:test_flutter/routes/select_payment_mode.dart';
 import 'package:test_flutter/models/scheme_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:test_flutter/start.dart';
+import 'package:test_flutter/routes/start.dart';
 
 void main() {
   runApp(const MyApp());

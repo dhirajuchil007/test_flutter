@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test_flutter/routes/dynamic_sip.dart';
+import 'package:test_flutter/routes/get_location_data.dart';
+import 'package:test_flutter/routes/otp_verification.dart';
 
 import 'main.dart';
 
@@ -22,7 +25,7 @@ class Start extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => InvestmentFlow(title: "My app")),
+                      builder: (context) => const OTPVerification()),
                 )
               },
             ),
@@ -36,6 +39,24 @@ class Start extends StatelessWidget {
                 )
               },
             ),
+            StartItem(
+                optionName: "Dynamic SIP",
+                callback: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const DynamicSIP()),
+                      )
+                    }),
+            StartItem(
+                optionName: "Get address",
+                callback: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GetLocation()),
+                      )
+                    })
           ],
         ),
       ),

@@ -32,7 +32,10 @@ dependencies:
   webview_flutter: any
   firebase_core: ^1.10.0
   firebase_database: ^8.1.0
-
+  firebase_auth: ^3.3.0
+  fl_chart: ^0.40.5
+  geolocator: ^8.0.1
+  geocoding: ^2.0.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -42,6 +45,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   http: any
+  fl_chart: ^0.40.5
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

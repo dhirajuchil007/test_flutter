@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:test_flutter/models/invest.dart';
 import 'package:test_flutter/models/mfpayment_response.dart';
 import 'package:test_flutter/models/payment_method_model.dart';
-import 'package:test_flutter/payment_web_view.dart';
+import 'package:test_flutter/routes/payment_web_view.dart';
 import 'package:test_flutter/services/api_endpoints.dart';
 import 'package:test_flutter/widgets/payment_method_widget.dart';
 
-import 'models/scheme_model.dart';
+import '../models/scheme_model.dart';
 
 class SelectPaymentMode extends StatefulWidget {
   final SchemeModel schemeModel;
