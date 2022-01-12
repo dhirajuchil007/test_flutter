@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:test_flutter/routes/dynamic_sip.dart';
 import 'package:test_flutter/routes/get_location_data.dart';
+import 'package:test_flutter/routes/home_screen.dart';
 import 'package:test_flutter/routes/otp_verification.dart';
 
 import 'main.dart';
@@ -56,7 +57,16 @@ class Start extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => const GetLocation()),
                       )
-                    })
+                    }),
+            StartItem(
+                optionName: "Home screen",
+                callback: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HomeScreen()),
+                  )
+                })
           ],
         ),
       ),
