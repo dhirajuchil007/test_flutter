@@ -132,7 +132,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
   bool isCurrentUrlForFinalPage(String url) {
     if (url.contains("cashrich/jsp/bse_payment_success.jsp") ||
         url.contains("cashrich/jsp/bse_payment_pending.jsp")) {
-      Navigator.push(context,
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => InvestmentSummary()));
       return true;
     }

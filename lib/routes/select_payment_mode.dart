@@ -26,19 +26,21 @@ class _SelectPaymentModeState extends State<SelectPaymentMode> {
   String amount;
   bool isInternetBankingSelected = false;
   bool isQuickPaySelected = false;
+
   Future<InvestResponse>? _investResponse;
   Future<MfPaymentResponse>? _paymentResponse;
-
+  String customerId = "96022";
+  bool isLoading = false;
   _SelectPaymentModeState(this.schemeModel, this.amount);
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
     return SafeArea(
       child: Scaffold(
         body: Container(
-          width: size.width,
-          height: size.height,
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -111,46 +113,13 @@ class _SelectPaymentModeState extends State<SelectPaymentMode> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    _investResponse = API_Endpoints().invest(
-                        "96022",
-                        schemeModel.schemeMasterId.toString(),
-                        double.parse(amount),
-                        "1234");
-                    _investResponse!.then((value) => {
-                          if (value.mfOrderId != null)
-                            {
-                              API_Endpoints()
-                                  .mfPayment(
-                                      "96022",
-                                      value.mfOrderId!,
-                                      isInternetBankingSelected ? 901 : 902,
-                                      15365)
-                                  .then(
-                                    (v) => {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => PaymentWebView(
-                                              link: v.response!.link,
-                                              page: v.response!.page,
-                                              paymentType:
-                                                  isInternetBankingSelected
-                                                      ? 901
-                                                      : 902,
-                                              mfOrderId: value.mfOrderId),
-                                        ),
-                                      ),
-                                    },
-                                  )
-                            }
-                        });
-                    setState(() {
-                      print(_investResponse.toString());
-                    });
-                  },
-                  child: Text("Invest")),
+              ElevatedButton(onPressed: btnPress, child: Text("Invest")),
+              SizedBox(
+                height: 20,
+              ),
+              Text(getTextData() ,
+                style: TextStyle(fontSize: 25),
+              ),
               FutureBuilder<InvestResponse>(
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -176,5 +145,49 @@ class _SelectPaymentModeState extends State<SelectPaymentMode> {
         ),
       ),
     );
+  }
+
+  String getTextData() {
+    return isLoading?
+               'Loading please wait':'Press Invest to continue';
+  }
+
+  void btnPress() {
+    setState(() {
+      isLoading = true;
+    });
+    startApi();
+  }
+
+  void startApi() async {
+    _investResponse = API_Endpoints().invest(customerId,
+        schemeModel.schemeMasterId.toString(), double.parse(amount), "1234");
+    _investResponse!.then((value) => {
+          if (value.mfOrderId != null)
+            {
+              API_Endpoints()
+                  .mfPayment(customerId, value.mfOrderId!,
+                      isInternetBankingSelected ? 901 : 902, 15365)
+                  .then(
+                    (v) => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentWebView(
+                              link: v.response!.link,
+                              page: v.response!.page,
+                              paymentType:
+                                  isInternetBankingSelected ? 901 : 902,
+                              mfOrderId: value.mfOrderId),
+                        ),
+                      ),
+                    },
+                  )
+            }
+        });
+    setState(() {
+      isLoading = false;
+      print(_investResponse.toString());
+    });
   }
 }
