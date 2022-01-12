@@ -1,6 +1,6 @@
 class Constants {
   static String BASE_URL = "https://sougatabasu.com/cashrich/";
-  static String API_UNAME="User@sm0k3";
-  static String API_PWD="\$mokeP@ss2020";
+  static String API_UNAME="user@sm0Ke";
+  static String API_PWD="sm0k3P@ss2022";
 
 }
