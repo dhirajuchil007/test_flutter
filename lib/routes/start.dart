@@ -3,7 +3,7 @@ import 'package:test_flutter/routes/dynamic_sip.dart';
 import 'package:test_flutter/routes/get_location_data.dart';
 import 'package:test_flutter/routes/otp_verification.dart';
 
-import 'main.dart';
+import '../main.dart';
 
 class Start extends StatelessWidget {
   const Start({Key? key}) : super(key: key);
