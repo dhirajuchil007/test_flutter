@@ -248,11 +248,13 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           scrollDirection: Axis.horizontal,
         ),
-        onNotification: (t) {
-          print(t.metrics.pixels);
-          print(t.metrics.maxScrollExtent);
+        onNotification: (scrollNotification) {
+          print(scrollNotification.metrics.pixels);
+          print(scrollNotification.metrics.maxScrollExtent);
           setState(() {
-            scrollPosition = t.metrics.pixels / t.metrics.maxScrollExtent * 100;
+            scrollPosition = scrollNotification.metrics.pixels /
+                scrollNotification.metrics.maxScrollExtent *
+                100;
           });
           return false;
         },

@@ -1,9 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import '../main.dart';
+import 'main.dart';
 
 class OTPVerification extends StatefulWidget {
   const OTPVerification({Key? key}) : super(key: key);
@@ -17,6 +18,8 @@ class _OTPVerificationState extends State<OTPVerification> {
   final myController = TextEditingController();
   bool showEnterOTP = false;
   String verificationID = "";
+
+  ConfirmationResult? webConfirmResult;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     if (showEnterOTP)
       ins = "Enter OTP";
     else
-      ins = "Ennter mobile number";
+      ins = "Enter mobile number";
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -82,40 +85,73 @@ class _OTPVerificationState extends State<OTPVerification> {
     String number = "+91$text";
     print("Mobile Number $number");
     FirebaseAuth auth = FirebaseAuth.instance;
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: '+91$text',
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        //todo add auto read later
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        this.verificationID = verificationId;
+    if (kIsWeb) {
+      webConfirmResult = await FirebaseAuth.instance
+          .signInWithPhoneNumber('+91$text');
+
+      if(webConfirmResult!=null){
         setState(() {
           showEnterOTP = true;
           myController.clear();
         });
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+      }
+      else{
+        print('Failed');
+      }
+
+      print(webConfirmResult!.verificationId);
+
+    } else
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: '+91$text',
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          //todo add auto read later
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          print(e.message);
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          this.verificationID = verificationId;
+          setState(() {
+            showEnterOTP = true;
+            myController.clear();
+          });
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
   }
 
   void verifyOTP(
       BuildContext context, String text, String verificationId) async {
     FirebaseAuth auth = FirebaseAuth.instance;
-
-    // Create a PhoneAuthCredential with the code
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId, smsCode: text);
-    print("verified $credential.token");
-    // Sign the user in (or link) with the credential
-    await auth.signInWithCredential(credential).whenComplete(() => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => InvestmentFlow(title: "My app")),
-          )
-        });
+    if (kIsWeb) {
+      var credential = await webConfirmResult!.confirm(text);
+      print('${credential }');
+      if (credential.credential?.token != null) {
+        print("verified ${credential.credential!.token}");
+        await auth
+            .signInWithCredential(credential.credential!)
+            .whenComplete(() => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InvestmentFlow(title: "My app")),
+                  )
+                });
+      }
+    } else {
+      // Create a PhoneAuthCredential with the code
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: text);
+      print("verified $credential.token");
+      // Sign the user in (or link) with the credential
+      await auth.signInWithCredential(credential).whenComplete(() => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InvestmentFlow(title: "My app")),
+            )
+          });
+    }
   }
 }

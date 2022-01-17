@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:test_flutter/routes/investment_summary.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -39,17 +41,37 @@ class _PaymentWebViewState extends State<PaymentWebView> {
         padding: const EdgeInsets.all(24.0),
         child: Theme(
           data: ThemeData.light(),
-          child: WebView(
+          child: Stack(children: [
+            buildWebView(),
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Payment in progress please wait.....'),
+                    SizedBox(height: 30,),
+                    Lottie.asset('assets/bank.json')
+                  ]),
+            )
+          ]),
+        ),
+      ),
+    );
+  }
+
+  WebView buildWebView() {
+
+      return
+      WebView(
             initialUrl: getRequiredPage(),
             javascriptMode: JavascriptMode.unrestricted,
             onWebViewCreated: (controller) {
               _webViewController = controller;
             },
             onPageFinished: pageLoaded,
-          ),
-        ),
-      ),
-    );
+          );
   }
 
   void pageLoaded(url) {

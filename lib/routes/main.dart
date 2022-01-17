@@ -1,36 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'package:test_flutter/ChangeNotifier/app_language.dart';
 import 'package:test_flutter/routes/select_payment_mode.dart';
 import 'package:test_flutter/models/scheme_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:test_flutter/routes/start.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  AppLanguage appLanguage = AppLanguage();
+  await appLanguage.fetchLocale();
+
+  runApp(MyApp(
+    appLanguage: appLanguage,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key, required this.appLanguage}) : super(key: key);
+  final AppLanguage appLanguage;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider<AppLanguage>(
+      create: (_) => appLanguage,
+      child: Consumer<AppLanguage>(
+        builder: (BuildContext context, value, Widget? child) {
+          return MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: [Locale('en'), Locale('hi')],
+            title: 'lol',
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)!.helloWorld,
+            locale:value.appLocal,
+            theme: ThemeData(
+              // This is the theme of your application.
+              //
+              // Try running your application with "flutter run". You'll see the
+              // application has a blue toolbar. Then, without quitting the app, try
+              // changing the primarySwatch below to Colors.green and then invoke
+              // "hot reload" (press "r" in the console where you ran "flutter run",
+              // or simply save your changes to "hot reload" in a Flutter IDE).
+              // Notice that the counter didn't reset back to zero; the application
+              // is not restarted.
+              primarySwatch: Colors.blue,
+            ),
+            home:  Start(),
+          );
+        },
       ),
-      home: const Start(),
     );
   }
 }
@@ -60,6 +82,7 @@ class _InvestmentFlowState extends State<InvestmentFlow> {
   final myController = TextEditingController();
   final databaseRef = FirebaseDatabase.instance.reference();
   final Future<FirebaseApp> _future = Firebase.initializeApp();
+  var _locale = 'en';
 
   void _incrementCounter() {
     setState(() {
@@ -81,92 +104,87 @@ class _InvestmentFlowState extends State<InvestmentFlow> {
     var paddingAround =
         EdgeInsets.symmetric(horizontal: padding, vertical: padding);
     return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: paddingAround,
-          // Center is a layout widget. It takes a single child and positions it
-          // in the middle of the parent.
-          child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Row(children: [
-                Image.asset(
-                  'assets/square_emboss_logo.png',
-                  width: 30,
-                  height: 30,
-                ),
-                Padding(
-                  padding: paddingAround,
-                  child: const Text(
-                    "CashRich",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ]),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () => showModal(context),
-                      child: Container(
-                        child: const Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text("ICICI Prudential Liquid Fund (G)"),
-                        ),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey)),
-                      ),
-                    ),
-                    Padding(
-                      padding: paddingAround,
-                      child: TextField(
-                        maxLength: 8,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        controller: myController,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(hintText: "Enter Amount"),
-                      ),
-                    )
-                  ],
+        child: Scaffold(
+      body: Padding(
+        padding: paddingAround,
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Invoke "debug painting" (press "p" in the console, choose the
+          // "Toggle Debug Paint" action from the Flutter Inspector in Android
+          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+          // to see the wireframe for each widget.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Row(children: [
+              Image.asset(
+                'assets/square_emboss_logo.png',
+                width: 30,
+                height: 30,
+              ),
+              Padding(
+                padding: paddingAround,
+                child: const Text(
+                  "CashRich",
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SelectPaymentMode(
-                            schemeModel: schemeModel,
-                            amount: myController.text)),
+            ]),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () => showModal(context),
+                    child: Container(
+                      child: const Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text("ICICI Prudential Liquid Fund (G)"),
+                      ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.grey)),
+                    ),
+                  ),
+                  Padding(
+                    padding: paddingAround,
+                    child: TextField(
+                      maxLength: 8,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      controller: myController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(hintText: "Enter Amount"),
+                    ),
                   )
-                },
-                child: const Text('Proceed'),
-              )
-            ],
-          ),
+                ],
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SelectPaymentMode(
+                          schemeModel: schemeModel, amount: myController.text)),
+                )
+              },
+              child: const Text('Proceed'),
+            )
+          ],
         ),
-        // This trailing comma makes auto-formatting nicer for build methods.
       ),
-    );
+    ));
   }
 
   void showModal(BuildContext context) {

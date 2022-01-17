@@ -33,7 +33,31 @@
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
   <script>
+
+
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDADDFvLJK6UGEDm0TquML0CMgvXMiUPkE",
+    authDomain: "projekt-dawn.firebaseapp.com",
+    databaseURL: "https://projekt-dawn-default-rtdb.firebaseio.com",
+    projectId: "projekt-dawn",
+    storageBucket: "projekt-dawn.appspot.com",
+    messagingSenderId: "837361676612",
+    appId: "1:837361676612:web:d687844f0c90d95f22e711"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
     function loadMainDartJs() {
