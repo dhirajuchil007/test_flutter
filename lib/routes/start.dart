@@ -7,6 +7,7 @@ import 'package:test_flutter/routes/home_screen.dart';
 import 'package:test_flutter/routes/main.dart';
 import 'package:test_flutter/routes/otp_verification.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:test_flutter/routes/scheme_graph.dart';
 
 class Start extends StatefulWidget {
   const Start({Key? key}) : super(key: key);
@@ -16,7 +17,8 @@ class Start extends StatefulWidget {
 }
 
 class _StartState extends State<Start> {
-  String selectedValue="English";
+  String selectedValue = "English";
+
   @override
   Widget build(BuildContext context) {
     var appLanguage = Provider.of<AppLanguage>(context);
@@ -33,7 +35,7 @@ class _StartState extends State<Start> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: DropdownButton<String>(
-                  value: selectedValue,
+                    value: selectedValue,
                     items: ['English', 'Hindi'].map((e) {
                       return DropdownMenuItem(
                         child: Text(e),
@@ -41,22 +43,19 @@ class _StartState extends State<Start> {
                       );
                     }).toList(),
                     onChanged: (item) {
-                    switch(item){
-                      case 'English':
+                      switch (item) {
+                        case 'English':
+                          appLanguage.changeLanguage(Locale('en'));
+                          break;
 
-                       appLanguage.changeLanguage(Locale('en'));
-                        break;
+                        case 'Hindi':
+                          appLanguage.changeLanguage(Locale('hi'));
+                          break;
+                      }
 
-                      case 'Hindi':
-                        appLanguage.changeLanguage(Locale('hi'));
-                        break;
-
-                    }
-
-                    setState(() {
-                      selectedValue=item??"";
-                    });
-
+                      setState(() {
+                        selectedValue = item ?? "";
+                      });
                     }),
               ),
               StartItem(
@@ -105,6 +104,15 @@ class _StartState extends State<Start> {
                           MaterialPageRoute(
                               builder: (context) => const HomeScreen()),
                         )
+                      }),
+              StartItem(
+                  optionName: AppLocalizations.of(context)!.schemeGraph,
+                  callback: () => {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SchemeGraph()),
+                        )
                       })
             ],
           ),
@@ -134,7 +142,10 @@ class StartItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.grey)),
           child: Padding(
-            child: Text(optionName),
+            child: Text(
+              optionName,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
             padding: EdgeInsets.all(24),
           ),
         ),

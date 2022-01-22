@@ -4,5 +4,6 @@
   "investment": "Investment",
   "dynamicSIP": "Dynamic SIP",
   "getAddress": "Get Address",
-  "homeScreen": "Home screen"
+  "homeScreen": "Home screen",
+  "schemeGraph": "Scheme Graph"
 }
